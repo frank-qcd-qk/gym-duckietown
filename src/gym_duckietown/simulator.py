@@ -918,7 +918,7 @@ class Simulator(gym.Env):
             print("************************************")
             logger.debug("Pos Originally: {} Rot Originally: {}".format(desc["pos"],desc["rotate"]))
             vanila_pos = desc["pos"]
-            randomly_offsetted_pos = [vanila_pos[0] + random.randint(-2,2),vanila_pos[1] + random.randint(-5,5)]
+            randomly_offsetted_pos = [vanila_pos[0] + random.randint(-0.5,0.5),vanila_pos[1] + random.randint(-5,5)]
             desc["pos"] = randomly_offsetted_pos
             vanila_rot = desc["rotate"]
             randomly_offsetted_rot = vanila_rot+random.randint(-90,90)
