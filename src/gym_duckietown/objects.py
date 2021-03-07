@@ -51,18 +51,13 @@ class WorldObj:
         self.min_coords = obj["mesh"].min_coords
         self.max_coords = obj["mesh"].max_coords
         self.static = obj["static"]
-        self.random_pos = obj["rand_pos"]
         self.safety_radius = safety_radius_mult * calculate_safety_radius(self.mesh, self.scale)
 
         self.domain_rand = domain_rand
         self.angle = obj["angle"]
-        
-        if self.random_pos:
-            self.pos = [self.pos[0] + random.randint(-2,2),self.pos[1] + random.randint(-5,5)]
-            self.y_rot = np.rad2deg(self.angle+random.randint(-90,90))
-        else:
-            self.pos = obj["pos"]
-            self.y_rot = np.rad2deg(self.angle)
+        self.pos = obj["pos"]
+        self.y_rot = np.rad2deg(self.angle)
+
         #  Find corners and normal vectors assoc w. object
         self.obj_corners = generate_corners(
             self.pos, self.min_coords, self.max_coords, self.angle, self.scale

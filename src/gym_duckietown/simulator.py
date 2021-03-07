@@ -17,6 +17,7 @@ from gym import spaces
 from gym.utils import seeding
 from numpy.random.mtrand import RandomState
 from pyglet import gl, image, window
+import random
 
 from duckietown_world import (
     get_DB18_nominal,
@@ -912,7 +913,17 @@ class Simulator(gym.Env):
 
     def interpret_object(self, objname: str, desc: MapFormat1Object):
         kind = desc["kind"]
-
+        
+        if desc.get("random_pos",False):
+            print("************************************")
+            logger.debug("Pos Originally: {} Rot Originally: {}".format(desc["pos"],desc["rotate"]))
+            vanila_pos = desc["pos"]
+            randomly_offsetted_pos = [vanila_pos[0] + random.randint(-2,2),vanila_pos[1] + random.randint(-5,5)]
+            desc["pos"] = randomly_offsetted_pos
+            vanila_rot = desc["rotate"]
+            randomly_offsetted_rot = vanila_rot+random.randint(-90,90)
+            desc["rotate"] = randomly_offsetted_rot
+            logger.debug("Pos randomized to: {} Rot randomized to: {}".format(desc["pos"],desc["rotate"]))
         W = self.grid_width
         tile_size = self.road_tile_size
         transform: SE2Transform = get_transform(desc, W, tile_size)
@@ -962,7 +973,6 @@ class Simulator(gym.Env):
         assert not ("height" in desc and "scale" in desc), "cannot specify both height and scale"
 
         static = desc.get("static", True)
-        rand_pos = desc.get("random_pos",False)
         # static = desc.get('static', False)
         # print('static is now', static)
 
@@ -974,7 +984,6 @@ class Simulator(gym.Env):
             "scale": scale,
             "optional": optional,
             "static": static,
-            "rand_pos": rand_pos
         }
 
         if static:
