@@ -216,7 +216,8 @@ class Simulator(gym.Env):
         distortion: bool = False,
         dynamics_rand: bool = False,
         camera_rand: bool = False,
-        randomize_maps_on_reset: bool = False,
+        randomize_maps_on_reset: bool = True,
+        map_names: list = [map_name],
         num_tris_distractors: int = 12,
         color_ground: Sequence[float] = (0.15, 0.15, 0.15),
         style: str = "photos",
@@ -356,7 +357,7 @@ class Simulator(gym.Env):
 
         self.randomize_maps_on_reset = randomize_maps_on_reset
 
-        if self.randomize_maps_on_reset:
+        if self.randomize_maps_on_reset and self.map_names is None:
             self.map_names = os.listdir(get_subdir_path("maps"))
             self.map_names = [
                 _map for _map in self.map_names if not _map.startswith(("calibration", "regress"))
