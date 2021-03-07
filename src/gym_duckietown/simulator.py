@@ -915,7 +915,6 @@ class Simulator(gym.Env):
         kind = desc["kind"]
         
         if desc.get("random_pos",False):
-            print("************************************")
             logger.debug("Pos Originally: {} Rot Originally: {}".format(desc["pos"],desc["rotate"]))
             vanila_pos = desc["pos"]
             randomly_offsetted_pos = [vanila_pos[0] + random.randint(-0.5,0.5),vanila_pos[1] + random.randint(-5,5)]
