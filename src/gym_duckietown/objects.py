@@ -19,6 +19,7 @@ from .collision import (
 )
 from .graphics import load_texture, rotate_point
 from .objmesh import ObjMesh
+from . import logger
 
 
 class WorldObj:
@@ -44,7 +45,6 @@ class WorldObj:
 
         self.kind = obj["kind"]
         self.mesh = obj["mesh"]
-        self.pos = obj["pos"]
         self.scale = obj["scale"]
         # self.y_rot =
         self.optional = obj["optional"]
@@ -56,8 +56,13 @@ class WorldObj:
 
         self.domain_rand = domain_rand
         self.angle = obj["angle"]
-        self.y_rot = np.rad2deg(self.angle)
-
+        
+        if self.random_pos:
+            self.pos = [self.pos[0] + random.randint(-2,2),self.pos[1] + random.randint(-5,5)]
+            self.y_rot = np.rad2deg(self.angle+random.randint(-90,90))
+        else:
+            self.pos = obj["pos"]
+            self.y_rot = np.rad2deg(self.angle)
         #  Find corners and normal vectors assoc w. object
         self.obj_corners = generate_corners(
             self.pos, self.min_coords, self.max_coords, self.angle, self.scale
@@ -343,9 +348,6 @@ class DuckieObj(WorldObj):
         WorldObj.__init__(self, obj, domain_rand, safety_radius_mult)
 
         self.walk_distance = walk_distance
-        if self.random_pos:
-            self.pos = [self.pos[0] + random.randint(-5,5),self.pos[1] + random.randint(-5,5)]
-            self.y_rot = np.rad2deg(self.angle+random.randint(-90,90))
 
         # Dynamic duckie stuff
 
